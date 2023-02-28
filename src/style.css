@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.header {
+    @apply h-32 bg-slate-700 w-full
+
+
+}
+
+.nav-cont {
+    @apply flex flex-row
+}
+
+
+.flexbox{
+    @apply flex
+}
+
+.hide{
+    @apply hidden
+}
+
+body{
+    @apply relative
+}
+
+.navbar {
+    @apply flex flex-col items-center justify-start bg-blue-300 min-h-screen w-60 space-y-8 pt-10
+}
+
+#newtask{
+    @apply mt-40
+}
+
+#formdiv{
+    @apply absolute justify-center items-center z-50 bg-white bg-opacity-30 w-screen h-screen
+}
+
+#formcontainer{
+    @apply flex-col space-y-8 py-8 bg-white shadow-xl px-6 justify-center items-center rounded flex
+}
+
+.content{
+    @apply grid grid-cols-3 gap-6 auto-rows-auto py-10 justify-start
+}
+
+#taskcontainer{
+    @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-6 
+}
+
+/*
+.nav-element
+
+.content  
+ */
