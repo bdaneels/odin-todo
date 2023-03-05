@@ -1,7 +1,10 @@
 to do's:
 
-bekijken hoe ik de html elements maak voor de tasks
-index adden als dataattribute aan de task
+relationship manager maken:
+tracking wat het actieve project is -> laten zien via styling op de dom
+content div opvullen via populate tasks met het project id
+dus project ids linken aan task ids in een relationship librarian
+
 
 
 Coden via het model view controller

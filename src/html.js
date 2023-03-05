@@ -21,8 +21,6 @@ const Pageload = (()=> {
         }
     
         createNavElement('Inbox')
-        createNavElement('Today')
-        createNavElement('This Week')
         createNavElement('New Task')
         createNavElement('New Project')
     
@@ -40,6 +38,7 @@ const Pageload = (()=> {
     }
 
     function _constructForms() {
+        /* new task */
        let formDiv = document.createElement('div')
        formDiv.setAttribute('id', 'formdiv')
        formDiv.classList.add('hide')
@@ -85,7 +84,35 @@ const Pageload = (()=> {
        formDiv.appendChild(formContainer)
        document.body.appendChild(formDiv)
 
+       /* new project */
+       let projectFormDiv = document.createElement('div')
+       projectFormDiv.setAttribute('id', 'projectformdiv')
+       projectFormDiv.classList.add('hide')
+       let projectFormContainer = document.createElement('div')
+       projectFormContainer.setAttribute('id', 'projectformcontainer')
+       let projectFormTitle = document.createElement('h2')
+       projectFormTitle.textContent = 'New Project'
+       projectFormTitle.setAttribute('id', 'projectformtitle')
+       let projectFormInput = document.createElement('input')
+       projectFormInput.setAttribute('id', 'projectforminput')
+       projectFormInput.setAttribute('type', 'text')
+       projectFormInput.setAttribute('placeholder', 'Project Description')
+       let projectSubmitButton = document.createElement('button')
+       projectSubmitButton.setAttribute('class', 'submitbutton')
+       projectSubmitButton.setAttribute('id', 'projectsubmitbutton')
+       projectSubmitButton.textContent = 'Submit'
+       let projectCancelButton = document.createElement('button')
+       projectCancelButton.setAttribute('class', 'cancelbutton')
+       projectCancelButton.setAttribute('id', 'projectcancelbutton')
+       projectCancelButton.textContent = 'cancel'
 
+
+       projectFormContainer.appendChild(projectFormTitle)
+       projectFormContainer.appendChild(projectFormInput)
+       projectFormContainer.appendChild(projectSubmitButton)
+       projectFormContainer.appendChild(projectCancelButton)
+       projectFormDiv.appendChild(projectFormContainer)
+       document.body.appendChild(projectFormDiv)
 
     }
 
@@ -96,12 +123,12 @@ const Pageload = (()=> {
 
     function _setEventListeners() {
         _targetById('#inbox').addEventListener('click', ()=> console.log('you clicked me'), false)
-        _targetById('#today').addEventListener('click', ()=> console.log('you clicked me'), false)
-        _targetById('#thisweek').addEventListener('click', ()=> console.log('you clicked me'), false)
         _targetById('#newtask').addEventListener('click', ()=> eventHandler.newTask(), false)
-        _targetById('#newproject').addEventListener('click', ()=> console.log('you clicked me'), false)
+        _targetById('#newproject').addEventListener('click', ()=> eventHandler.newProject(), false)
         _targetById('#submitbutton').addEventListener('click', eventHandler.formSubmit, false)
         _targetById('#cancelbutton').addEventListener('click', ()=> eventHandler.cancelTask(), false)
+        _targetById('#projectsubmitbutton').addEventListener('click', ()=> eventHandler.projectFormSubmit(), false)
+        _targetById('#projectcancelbutton').addEventListener('click', ()=> eventHandler.cancelProject(), false)
     }
 
 
@@ -114,7 +141,7 @@ const Pageload = (()=> {
             let date = array[object].getDate()
             let priority = array[object].getPriority()
             let index = object
-            let localDate = dateHandler.formatLocaleDate(date)
+        
 
             let startDiv = document.querySelector('.content')
             let container = document.createElement('div')
@@ -186,17 +213,45 @@ const Pageload = (()=> {
         }
     }
 
+    function populateProjects(){
+        let projectDiv = document.createElement('div')
+        projectDiv.innerHTML= ""
+        let newtask = document.getElementById('newtask')
+        let parentNode = newtask.parentNode
+        let array = projectDB.getProjectArray()
+        for (let object in array) {
+            let title = array[object].getTitle()
+            let index = projectDB.getIndex(array[object])
+            let projectBtn = document.createElement('button')
+            projectBtn.setAttribute('data', index)
+            projectBtn.setAttribute('id', 'projectbtn')
+            projectBtn.textContent = title
+            projectDiv.appendChild(projectBtn)
+        }
+        
+        
+        
+        
+        
+        
+        parentNode.insertBefore(projectDiv,newtask)
+
+
+    }
+
 
     function load (){
         _constructForms()
         _constructHTML()
         populateTasks()
+        populateProjects()
         _setEventListeners()
        
     }
 
     return{ load,
-        populateTasks
+        populateTasks,
+        populateProjects
 
     }
 

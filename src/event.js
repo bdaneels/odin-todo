@@ -9,8 +9,16 @@ const eventHandler = (()=> {
         domHandler.showForm('task')
     }
 
+    function newProject(){
+        domHandler.showForm('project')
+    }
+
     function cancelTask(){
         domHandler.closeForm('task')
+    }
+
+    function cancelProject(){
+        domHandler.closeForm('project')
     }
 
     function formSubmit (e) {
@@ -20,11 +28,21 @@ const eventHandler = (()=> {
                 
     }
 
+    function projectFormSubmit () {
+        formInputHandler.createProject()
+        domHandler.closeForm('project')
+        console.log('eventhandler poject called')
+                
+    }
+
 
     return{
         newTask,
         cancelTask,
-        formSubmit
+        formSubmit,
+        projectFormSubmit,
+        newProject,
+        cancelProject
     }
 
 })()
@@ -38,12 +56,22 @@ const domHandler = (()=> {
             element.classList.add('flexbox')
             element.classList.remove('hide')
             console.log('newtask nav element clicked')
+        } else {
+            let element=document.querySelector('#projectformdiv')
+            element.classList.add('flexbox')
+            element.classList.remove('hide')
+            console.log('new project nav element clicked')
         }
     }
 
     function closeForm(option) {
         if (option === "task") {
             let element=document.querySelector('#formdiv')
+            element.classList.add('hide')
+            element.classList.remove('flexbox')
+            _resetForm(option)
+        } else {
+            let element=document.querySelector('#projectformdiv')
             element.classList.add('hide')
             element.classList.remove('flexbox')
             _resetForm(option)
@@ -56,6 +84,9 @@ const domHandler = (()=> {
             document.querySelector('#highpriority').checked = false
             document.querySelector('#formdate').value = ""    
             console.log('resetform func called')
+        } else {
+            document.querySelector('#projectforminput').value = ""
+            console.log('projectresetform func called')
         }
     }
 
@@ -75,7 +106,7 @@ const formInputHandler = (()=> {
         
         console.log(title, date, priority)
 
-        let task = new Task(title, date, priority)
+        let task = new Task(title, priority, date)
         taskDB.addTask(task)
         let index = taskDB.getIndex(task)
         console.log(index)
@@ -83,8 +114,16 @@ const formInputHandler = (()=> {
         /* delete under*/
         Pageload.populateTasks()
 
-
     }
+
+    function createProject(){
+        let title = document.getElementById('projectforminput').value
+        let project = new Project(title)
+        projectDB.addProject(project)
+        console.log('project create func called')
+        Pageload.populateProjects()
+    }
+
 
     function _checkDomPriority(element){
         if (element.checked === true){
@@ -95,7 +134,8 @@ const formInputHandler = (()=> {
     }
  
     return{
-        createTask
+        createTask,
+        createProject
     }
 
 })()

@@ -33,11 +33,11 @@ body{
     @apply mt-40
 }
 
-#formdiv{
+#formdiv, #projectformdiv{
     @apply absolute justify-center items-center z-50 bg-white bg-opacity-30 w-screen h-screen
 }
 
-#formcontainer{
+#formcontainer,#projectformcontainer{
     @apply flex-col space-y-8 py-8 bg-white shadow-xl px-6 justify-center items-center rounded flex
 }
 
@@ -46,7 +46,7 @@ body{
 }
 
 #taskcontainer{
-    @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-6 
+    @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-6 max-h-16
 }
 
 /*
