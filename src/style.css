@@ -29,6 +29,11 @@ body{
     @apply flex flex-col items-center justify-start bg-blue-300 min-h-screen w-60 space-y-8 pt-10
 }
 
+#forminput, #projectforminput {
+    @apply placeholder:items-center
+}
+
+
 #newtask{
     @apply mt-40
 }
@@ -42,11 +47,11 @@ body{
 }
 
 .content{
-    @apply grid grid-cols-3 gap-6 auto-rows-auto py-10 justify-start
+    @apply flex flex-col space-y-10 py-10 justify-start w-full
 }
 
 #taskcontainer{
-    @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-6 max-h-16
+    @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-12 h-10 mx-auto px-10
 }
 
 /*
