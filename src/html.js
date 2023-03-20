@@ -23,7 +23,10 @@ const Pageload = (()=> {
         createNavElement('Inbox')
         createNavElement('New Task')
         createNavElement('New Project')
-    
+        
+        
+
+
         let contentDiv = document.createElement('div')
         contentDiv.classList.add('content')
     
@@ -31,10 +34,16 @@ const Pageload = (()=> {
         navbarContentDiv.appendChild(contentDiv)
     
     
-    
+       
     
         document.body.appendChild(header)
         document.body.appendChild(navbarContentDiv)
+
+        let projectDiv = document.createElement('div')
+        projectDiv.setAttribute('id','projectdiv')
+        let newtask = document.getElementById('newtask')
+        let parentNode = newtask.parentNode
+        parentNode.insertBefore(projectDiv,newtask)
     }
 
     function _constructForms() {
@@ -55,6 +64,11 @@ const Pageload = (()=> {
        let formDate = document.createElement('input')
        formDate.setAttribute('id', 'formdate')
        formDate.setAttribute('type', 'date')
+       let projectSelectLabel = document.createElement('label')
+       projectSelectLabel.setAttribute('for', 'projectselect')
+       projectSelectLabel.textContent= 'Select a project:'
+       let projectSelect = document.createElement('select')
+       projectSelect.setAttribute('id','projectselect') 
        let priority = document.createElement('input')
        priority.setAttribute('type', 'checkbox') 
        priority.setAttribute('id', 'highpriority')
@@ -77,6 +91,8 @@ const Pageload = (()=> {
        formContainer.appendChild(formTitle)
        formContainer.appendChild(formInput)
        formContainer.appendChild(formDate)
+       formContainer.appendChild(projectSelectLabel)
+       formContainer.appendChild(projectSelect)
        formContainer.appendChild(labelPriority)
        formContainer.appendChild(priority)
        formContainer.appendChild(submitButton)
@@ -114,6 +130,21 @@ const Pageload = (()=> {
        projectFormDiv.appendChild(projectFormContainer)
        document.body.appendChild(projectFormDiv)
 
+    }
+
+
+    function populateProjectSelect(){
+        let selectDiv = document.querySelector('#projectselect')
+        selectDiv.innerHTML =''
+        let projectArray = projectDB.getProjectArray()
+
+       for (let project in projectArray){
+        let option = document.createElement('option')
+        let title = projectArray[project].getTitle()
+        option.setAttribute('value', title)
+        option.textContent = title
+        selectDiv.appendChild(option)
+       }
     }
 
     function _targetById(id) {
@@ -214,10 +245,9 @@ const Pageload = (()=> {
     }
 
     function populateProjects(){
-        let projectDiv = document.createElement('div')
+        let projectDiv = document.querySelector('#projectdiv')
         projectDiv.innerHTML= ""
-        let newtask = document.getElementById('newtask')
-        let parentNode = newtask.parentNode
+
         let array = projectDB.getProjectArray()
         for (let object in array) {
             let title = array[object].getTitle()
@@ -226,22 +256,22 @@ const Pageload = (()=> {
             projectBtn.setAttribute('data', index)
             projectBtn.setAttribute('id', 'projectbtn')
             projectBtn.textContent = title
+            projectBtn.addEventListener('click', function(){
+                
+                let projectIndex = projectBtn.getAttribute('data');
+                console.log(projectIndex)
+                
+            })
             projectDiv.appendChild(projectBtn)
         }
         
-        
-        
-        
-        
-        
-        parentNode.insertBefore(projectDiv,newtask)
-
 
     }
 
 
     function load (){
         _constructForms()
+        populateProjectSelect()
         _constructHTML()
         populateTasks()
         populateProjects()
@@ -251,7 +281,8 @@ const Pageload = (()=> {
 
     return{ load,
         populateTasks,
-        populateProjects
+        populateProjects,
+        populateProjectSelect
 
     }
 

@@ -28,6 +28,8 @@ const eventHandler = (()=> {
                 
     }
 
+    
+
     function projectFormSubmit () {
         formInputHandler.createProject()
         domHandler.closeForm('project')
@@ -42,7 +44,8 @@ const eventHandler = (()=> {
         formSubmit,
         projectFormSubmit,
         newProject,
-        cancelProject
+        cancelProject,
+    
     }
 
 })()
@@ -103,15 +106,18 @@ const formInputHandler = (()=> {
         let title = document.getElementById('forminput').value
         let date = dateHandler.formatDate(document.getElementById('formdate').value)
         let priority = _checkDomPriority(document.getElementById('highpriority'))
-        
-        console.log(title, date, priority)
+        let projectTitle = document.getElementById('projectselect').value
+        let project = projectDB.getProjectByTitle(projectTitle)
+        let projectIndex = projectDB.getIndex(project)
+        console.log(title, date, priority, projectIndex)
 
         let task = new Task(title, priority, date)
         taskDB.addTask(task)
-        let index = taskDB.getIndex(task)
-        console.log(index)
+        let taskIndex = taskDB.getIndex(task)
+        console.log(taskIndex)
 
-        /* delete under*/
+        relationshipHandler.addRelationship(projectIndex,taskIndex)
+
         Pageload.populateTasks()
 
     }
@@ -122,6 +128,7 @@ const formInputHandler = (()=> {
         projectDB.addProject(project)
         console.log('project create func called')
         Pageload.populateProjects()
+        Pageload.populateProjectSelect()
     }
 
 
@@ -158,6 +165,42 @@ return {
 }
 
 })()
+
+
+const relationshipHandler = (() => {
+    const relationshipMap = new Map()
+  
+    function addRelationship(projectIndex, taskIndex) {
+      if (relationshipMap.has(projectIndex)) {
+        relationshipMap.get(projectIndex).push(taskIndex)
+      } else {
+        relationshipMap.set(projectIndex, [taskIndex])
+      }
+    }
+  
+    function removeRelationship(projectIndex, taskIndex) {
+      if (relationshipMap.has(projectIndex)) {
+        const taskIndices = relationshipMap.get(projectIndex)
+        const index = taskIndices.indexOf(taskIndex)
+        if (index !== -1) {
+          taskIndices.splice(index, 1)
+          if (taskIndices.length === 0) {
+            relationshipMap.delete(projectIndex)
+          }
+        }
+      }
+    }
+  
+    function getTasksByProject(projectIndex) {
+      return relationshipMap.get(projectIndex) || []
+    }
+  
+    return {
+      addRelationship,
+      removeRelationship,
+      getTasksByProject
+    }
+  })()
 
 
 

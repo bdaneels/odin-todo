@@ -38,6 +38,10 @@ body{
     @apply mt-40
 }
 
+#projectdiv{
+    @apply flex flex-col space-y-8
+}
+
 #formdiv, #projectformdiv{
     @apply absolute justify-center items-center z-50 bg-white bg-opacity-30 w-screen h-screen
 }

@@ -48,12 +48,22 @@ const projectDB = (()=> {
         let index = getIndex(object)
         delete projectArray[index]
     }
+    function getProjectByTitle(title) {
+        const projectArray = getProjectArray()
+        for (let i = 0; i < projectArray.length; i++) {
+          if (projectArray[i].title === title) {
+            return projectArray[i]
+          }
+        }
+        return null // return null if project with given title not found
+      }
 
     return{
         getProjectArray,
         addProject,
         getIndex,
-        removeProject
+        removeProject,
+        getProjectByTitle
     }
 
 })()
@@ -115,13 +125,16 @@ let task2 = new Task('task 2', 'high', '22/03/22')
 let task3 = new Task('task 3', 'high', '22/03/22')
 let task4 = new Task('task 4', 'high', '22/03/22')
 
+
 taskDB.addTask(task1)
 taskDB.addTask(task2)
 taskDB.addTask(task3)
 taskDB.addTask(task4)
 
+/* dummy project */
+let project1 = new Project('default')
 
-
+projectDB.addProject(project1)
 
 
 Pageload.load()
