@@ -1,4 +1,4 @@
-import { eventHandler, dateHandler } from "./event"
+import { eventHandler, dateHandler, relationshipHandler } from "./event"
 import { Task, Project, taskDB, projectDB } from '.'
 
 const Pageload = (()=> {
@@ -163,14 +163,24 @@ const Pageload = (()=> {
     }
 
 
-    function populateTasks(){
+    function populateTasks(projectIndex){
+        
+        console.log(`populate task function called with an in dex of ${projectIndex}`)
         let startDiv = document.querySelector('.content')
+        
+        let arrayTaskIndexes = relationshipHandler.getTasksByProject(projectIndex)
+        let taskArray = taskDB.getTaskArray()
+        console.log(arrayTaskIndexes)
+        
         startDiv.innerHTML = ""
-        let array = taskDB.getTaskArray()
-        for(const object in array) {
-            let title = array[object].getTitle()
-            let date = array[object].getDate()
-            let priority = array[object].getPriority()
+
+        for(let i in arrayTaskIndexes) {
+            let taskIndex = arrayTaskIndexes[i]
+            let task = taskArray[taskIndex]
+
+            let title = task.getTitle()
+            let date = task.getDate()
+            let priority = task.getPriority()
             let index = object
         
 
@@ -260,7 +270,8 @@ const Pageload = (()=> {
                 
                 let projectIndex = projectBtn.getAttribute('data');
                 console.log(projectIndex)
-                
+                populateTasks(projectIndex)
+
             })
             projectDiv.appendChild(projectBtn)
         }

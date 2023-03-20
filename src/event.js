@@ -114,11 +114,11 @@ const formInputHandler = (()=> {
         let task = new Task(title, priority, date)
         taskDB.addTask(task)
         let taskIndex = taskDB.getIndex(task)
-        console.log(taskIndex)
 
         relationshipHandler.addRelationship(projectIndex,taskIndex)
 
-        Pageload.populateTasks()
+        /* change argument below */
+        /* Pageload.populateTasks() */
 
     }
 
@@ -176,6 +176,8 @@ const relationshipHandler = (() => {
       } else {
         relationshipMap.set(projectIndex, [taskIndex])
       }
+      console.log(`relationship added with ${projectIndex} as projectindex and ${taskIndex} as taskindex`)
+      console.log(relationshipMap)
     }
   
     function removeRelationship(projectIndex, taskIndex) {
@@ -192,7 +194,9 @@ const relationshipHandler = (() => {
     }
   
     function getTasksByProject(projectIndex) {
-      return relationshipMap.get(projectIndex) || []
+        const taskIndices = relationshipMap.get(projectIndex)
+        console.log(`the tasksindices are called by gettasksbyproject ${taskIndices}`)
+        return taskIndices ? taskIndices : []
     }
   
     return {
@@ -204,4 +208,4 @@ const relationshipHandler = (() => {
 
 
 
-export {domHandler, eventHandler, dateHandler}
+export {domHandler, eventHandler, dateHandler, relationshipHandler}
