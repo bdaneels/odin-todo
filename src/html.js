@@ -1,5 +1,5 @@
 import { eventHandler, dateHandler, relationshipHandler } from "./event"
-import { Task, Project, taskDB, projectDB } from '.'
+import { Task, Project, taskDB, projectDB, activeProject } from '.'
 
 const Pageload = (()=> {
     
@@ -20,7 +20,7 @@ const Pageload = (()=> {
             navbar.appendChild(newNavElement)
         }
     
-        createNavElement('Inbox')
+        createNavElement('Projects')
         createNavElement('New Task')
         createNavElement('New Project')
         
@@ -153,7 +153,7 @@ const Pageload = (()=> {
     }
 
     function _setEventListeners() {
-        _targetById('#inbox').addEventListener('click', ()=> console.log('you clicked me'), false)
+        _targetById('#projects').addEventListener('click', ()=> console.log('you clicked me'), false)
         _targetById('#newtask').addEventListener('click', ()=> eventHandler.newTask(), false)
         _targetById('#newproject').addEventListener('click', ()=> eventHandler.newProject(), false)
         _targetById('#submitbutton').addEventListener('click', eventHandler.formSubmit, false)
@@ -163,9 +163,11 @@ const Pageload = (()=> {
     }
 
 
-    function populateTasks(projectIndex){
-        
-        console.log(`populate task function called with an in dex of ${projectIndex}`)
+    function populateTasks(){
+        let projectIndex = activeProject.getActiveProject()
+
+
+        console.log(`populate task function called with an projectindex of ${projectIndex}`)
         let startDiv = document.querySelector('.content')
         
         let arrayTaskIndexes = relationshipHandler.getTasksByProject(projectIndex)
@@ -181,7 +183,7 @@ const Pageload = (()=> {
             let title = task.getTitle()
             let date = task.getDate()
             let priority = task.getPriority()
-            let index = object
+            let index = taskIndex
         
 
             let startDiv = document.querySelector('.content')
@@ -218,7 +220,12 @@ const Pageload = (()=> {
             deleteButton.textContent = "Delete";
             deleteButton.addEventListener('click', function() {
                 let container = this.parentElement;
-                let index = container.getAttribute('data');
+                let index = parseInt(container.getAttribute('data'));
+                
+                let projectIndex = relationshipHandler.getProjectByTask(index)
+                relationshipHandler.removeRelationship(projectIndex,index)
+                console.log(`relationship removed with ${projectIndex}project index and taskindex ${index}`)
+
                 taskDB.removeTask(index);
                 populateTasks();
             });
@@ -230,6 +237,7 @@ const Pageload = (()=> {
                 let container = this.parentElement;
                 let index = container.getAttribute('data');
                 let newDate = dateHandler.formatDate(this.value);
+            
 
                 taskDB.getTask(index).setDate(newDate);
                 populateTasks()
@@ -270,7 +278,8 @@ const Pageload = (()=> {
                 
                 let projectIndex = projectBtn.getAttribute('data');
                 console.log(projectIndex)
-                populateTasks(projectIndex)
+                activeProject.setActiveProject(projectIndex)
+                populateTasks()
 
             })
             projectDiv.appendChild(projectBtn)

@@ -68,7 +68,23 @@ const projectDB = (()=> {
 
 })()
 
+const activeProject = (()=> {
+    let activeProject = '0'
 
+    function setActiveProject(projectIndex){
+        activeProject = projectIndex
+    }
+
+    const getActiveProject = () => activeProject
+
+    
+
+    return{
+       setActiveProject,
+       getActiveProject
+    }
+
+})()
 
 
 class Task {
@@ -116,25 +132,14 @@ class Project {
     }
 }
 
-export{taskDB,projectDB, Project, Task}
+export{taskDB,projectDB, activeProject, Project, Task}
 
 
-/* dummy tasks */
-let task1 = new Task('task 1', 'high', '22/03/22')
-let task2 = new Task('task 2', 'high', '22/03/22')
-let task3 = new Task('task 3', 'high', '22/03/22')
-let task4 = new Task('task 4', 'high', '22/03/22')
-
-
-taskDB.addTask(task1)
-taskDB.addTask(task2)
-taskDB.addTask(task3)
-taskDB.addTask(task4)
-
-/* dummy project */
+/* default project */
 let project1 = new Project('default')
 
 projectDB.addProject(project1)
+activeProject.setActiveProject(0)
 
 
 Pageload.load()

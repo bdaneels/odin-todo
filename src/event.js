@@ -118,7 +118,7 @@ const formInputHandler = (()=> {
         relationshipHandler.addRelationship(projectIndex,taskIndex)
 
         /* change argument below */
-        /* Pageload.populateTasks() */
+         Pageload.populateTasks() 
 
     }
 
@@ -168,41 +168,63 @@ return {
 
 
 const relationshipHandler = (() => {
-    const relationshipMap = new Map()
-  
+    const relationshipObject = {}
+    
     function addRelationship(projectIndex, taskIndex) {
-      if (relationshipMap.has(projectIndex)) {
-        relationshipMap.get(projectIndex).push(taskIndex)
+      if (relationshipObject.hasOwnProperty(projectIndex)) {
+        relationshipObject[projectIndex].push(taskIndex)
       } else {
-        relationshipMap.set(projectIndex, [taskIndex])
+        relationshipObject[projectIndex] = [taskIndex]
       }
       console.log(`relationship added with ${projectIndex} as projectindex and ${taskIndex} as taskindex`)
-      console.log(relationshipMap)
+      console.log(relationshipObject)
     }
-  
+    
     function removeRelationship(projectIndex, taskIndex) {
-      if (relationshipMap.has(projectIndex)) {
-        const taskIndices = relationshipMap.get(projectIndex)
+      if (relationshipObject.hasOwnProperty(projectIndex)) {
+        const taskIndices = relationshipObject[projectIndex]
         const index = taskIndices.indexOf(taskIndex)
         if (index !== -1) {
           taskIndices.splice(index, 1)
           if (taskIndices.length === 0) {
-            relationshipMap.delete(projectIndex)
+            delete relationshipObject[projectIndex]
           }
         }
       }
     }
-  
+    
     function getTasksByProject(projectIndex) {
-        const taskIndices = relationshipMap.get(projectIndex)
-        console.log(`the tasksindices are called by gettasksbyproject ${taskIndices}`)
-        return taskIndices ? taskIndices : []
+      const taskIndices = relationshipObject[projectIndex]
+      const tasks = []
+      if (taskIndices) {
+        for (let i = 0; i < taskIndices.length; i++) {
+          tasks.push(taskIndices[i])
+        }
+      }
+      console.log(`the tasksindices are called by gettasksbyproject taskindices: ${tasks}`)
+      return tasks
     }
-  
+    
+    function getProjectByTask(taskIndex) {
+        for (let projectIndex in relationshipObject) {
+          if (relationshipObject.hasOwnProperty(projectIndex)) {
+            const taskIndices = relationshipObject[projectIndex]
+            if (taskIndices.includes(taskIndex)) {
+              console.log(`the project index for task index ${taskIndex} is ${projectIndex}`)
+              return projectIndex
+            }
+          }
+        }
+        console.log(`no project found for task index ${taskIndex}`)
+        return null
+      }
+
+
     return {
       addRelationship,
       removeRelationship,
-      getTasksByProject
+      getTasksByProject,
+      getProjectByTask
     }
   })()
 

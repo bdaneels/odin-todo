@@ -58,6 +58,11 @@ body{
     @apply flex justify-evenly items-center bg-slate-400 rounded shadow-xl space-x-12 h-10 mx-auto px-10
 }
 
+.submitbutton,
+.cancelbutton{
+    @apply bg-black text-white rounded-xl py-4 px-10 hover:bg-white hover:text-black
+}
+
 /*
 .nav-element
 
