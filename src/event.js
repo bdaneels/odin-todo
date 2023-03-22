@@ -117,7 +117,7 @@ const formInputHandler = (()=> {
 
         relationshipHandler.addRelationship(projectIndex,taskIndex)
 
-        /* change argument below */
+
          Pageload.populateTasks() 
 
     }

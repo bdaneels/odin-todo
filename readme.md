@@ -2,8 +2,12 @@ to do's:
 
 relationship manager maken:
 tracking wat het actieve project is -> laten zien via styling op de dom
-content div opvullen via populate tasks met het project id
-dus project ids linken aan task ids in een relationship librarian
+
+local storage
+
+styling of the dom
+
+general user experience
 
 
 

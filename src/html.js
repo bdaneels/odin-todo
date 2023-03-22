@@ -20,7 +20,7 @@ const Pageload = (()=> {
             navbar.appendChild(newNavElement)
         }
     
-        createNavElement('Projects')
+        createNavElement('All Tasks')
         createNavElement('New Task')
         createNavElement('New Project')
         
@@ -153,7 +153,7 @@ const Pageload = (()=> {
     }
 
     function _setEventListeners() {
-        _targetById('#projects').addEventListener('click', ()=> console.log('you clicked me'), false)
+        _targetById('#alltasks').addEventListener('click', ()=> console.log('you clicked me'), false)
         _targetById('#newtask').addEventListener('click', ()=> eventHandler.newTask(), false)
         _targetById('#newproject').addEventListener('click', ()=> eventHandler.newProject(), false)
         _targetById('#submitbutton').addEventListener('click', eventHandler.formSubmit, false)
@@ -276,8 +276,8 @@ const Pageload = (()=> {
             projectBtn.textContent = title
             projectBtn.addEventListener('click', function(){
                 
-                let projectIndex = projectBtn.getAttribute('data');
-                console.log(projectIndex)
+                let projectIndex = parseInt(projectBtn.getAttribute('data')) ;
+                console.log(typeof projectIndex)
                 activeProject.setActiveProject(projectIndex)
                 populateTasks()
 
