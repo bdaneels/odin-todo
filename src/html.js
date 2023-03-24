@@ -100,6 +100,56 @@ const Pageload = (()=> {
        formDiv.appendChild(formContainer)
        document.body.appendChild(formDiv)
 
+
+        /* edit task */
+        let editFormDiv = document.createElement('div')
+        editFormDiv.setAttribute('id', 'editformdiv')
+        editFormDiv.classList.add('hide')
+        let editFormContainer = document.createElement('div')
+        editFormContainer.setAttribute('id', 'editformcontainer')
+        let editFormTitle = document.createElement('h2')
+        editFormTitle.textContent = 'Edit Task'
+        editFormTitle.setAttribute('id', 'editformtitle')
+        let editFormInput = document.createElement('input')
+        editFormInput.setAttribute('id', 'editforminput')
+        editFormInput.setAttribute('type', 'text')
+        editFormInput.setAttribute('placeholder', 'Task Description')
+        let editFormDate = document.createElement('input')
+        editFormDate.setAttribute('id', 'editformdate')
+        editFormDate.setAttribute('type', 'date')
+        let editProjectSelectLabel = document.createElement('label')
+        editProjectSelectLabel.setAttribute('for', 'projectselect')
+        editProjectSelectLabel.textContent= 'Select a project:'
+        let editProjectSelect = document.createElement('select')
+        editProjectSelect.setAttribute('id','editprojectselect') 
+/*         let priority = document.createElement('input')
+        priority.setAttribute('type', 'checkbox') 
+        priority.setAttribute('id', 'highpriority')
+        priority.setAttribute('name', 'priority') */
+       /*  let labelPriority = document.createElement('label')
+        labelPriority.setAttribute('for', 'priority')
+        labelPriority.setAttribute('id', 'prioritylabel')
+        labelPriority.textContent = "High Priority" */
+        let editSubmitButton = document.createElement('button')
+        editSubmitButton.setAttribute('class', 'submitbutton')
+        editSubmitButton.setAttribute('id', 'editsubmitbutton')
+        editSubmitButton.textContent = 'submit'
+        let editCancelButton = document.createElement('button')
+        editCancelButton.setAttribute('class', 'cancelbutton')
+        editCancelButton.setAttribute('id', 'editcancelbutton')
+        editCancelButton.textContent = 'cancel'
+ 
+        editFormContainer.appendChild(editFormTitle)
+        editFormContainer.appendChild(editFormInput)
+        editFormContainer.appendChild(editFormDate)
+        editFormContainer.appendChild(editProjectSelectLabel)
+        editFormContainer.appendChild(editProjectSelect)
+        editFormContainer.appendChild(editSubmitButton)
+        editFormContainer.appendChild(editCancelButton)
+        editFormDiv.appendChild(editFormContainer)
+        document.body.appendChild(editFormDiv)
+
+
        /* new project */
        let projectFormDiv = document.createElement('div')
        projectFormDiv.setAttribute('id', 'projectformdiv')
@@ -230,18 +280,14 @@ const Pageload = (()=> {
                 populateTasks();
             });
 
-            let dateInput = document.createElement('input');
-            dateInput.setAttribute('type', 'date')
-            dateInput.setAttribute('placeholder', date)
-            dateInput.addEventListener('change', function() {
-                let container = this.parentElement;
-                let index = container.getAttribute('data');
-                let newDate = dateHandler.formatDate(this.value);
-            
+            let editButton = document.createElement('button')
+            editButton.textContent = 'Edit'
+            deleteButton.addEventListener('click', function(){
+                console.log('clicked the edit button')
 
-                taskDB.getTask(index).setDate(newDate);
-                populateTasks()
-            });
+
+
+            })
 
         
 
@@ -251,7 +297,7 @@ const Pageload = (()=> {
             container.appendChild(dateDiv)
             container.appendChild(priorityBtn)
             container.appendChild(deleteButton)
-            container.appendChild(dateInput);
+            container.appendChild(editButton);
           
 
             startDiv.appendChild(container)

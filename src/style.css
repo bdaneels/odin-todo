@@ -42,11 +42,11 @@ body{
     @apply flex flex-col space-y-8
 }
 
-#formdiv, #projectformdiv{
+#formdiv, #projectformdiv, #editformdiv{
     @apply absolute justify-center items-center z-50 bg-white bg-opacity-30 w-screen h-screen
 }
 
-#formcontainer,#projectformcontainer{
+#formcontainer,#projectformcontainer, #editformcontainer{
     @apply flex-col space-y-8 py-8 bg-white shadow-xl px-6 justify-center items-center rounded flex
 }
 

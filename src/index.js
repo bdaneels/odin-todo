@@ -4,26 +4,36 @@ import { Pageload } from './html'
 
 
 
+
 const taskDB = (()=> {
-    const taskArray = new Array()
+    let taskArray =  []
 
     function addTask (object){
 
         taskArray.push(object)
+        saveTasks()
     }
     const getTaskArray = () => taskArray
+    function setTaskArray(array){
+        taskArray = array
+    }
+    function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(taskArray));
+      }
     function getIndex (object) {
         return taskArray.indexOf(object)
         
     }
     function removeTask(index){
         delete taskArray[index]
+        saveTasks()
     }
 
     const getTask = (index) => taskArray[index]
 
     return{
         getTaskArray,
+        setTaskArray,
         addTask,
         getIndex,
         removeTask,
