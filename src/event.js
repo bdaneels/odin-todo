@@ -23,12 +23,26 @@ const eventHandler = (()=> {
 
     function formSubmit (e) {
         e.preventDefault()
+
         formInputHandler.createTask()
         domHandler.closeForm('task')
                 
     }
 
-    
+    function cancelEditTask(){
+      domHandler.closeForm('edit')
+    }
+
+    function editTask(index){
+      domHandler.showForm('edit')
+      domHandler.populateEditTask(index)
+    }
+
+    function editTaskSubmit(){
+     
+      formInputHandler.editTask()
+      domHandler.closeForm('edit')
+    }
 
     function projectFormSubmit () {
         formInputHandler.createProject()
@@ -45,6 +59,9 @@ const eventHandler = (()=> {
         projectFormSubmit,
         newProject,
         cancelProject,
+        editTask,
+        cancelEditTask,
+        editTaskSubmit
     
     }
 
@@ -53,13 +70,40 @@ const eventHandler = (()=> {
 
 const domHandler = (()=> {
     
+    function populateEditTask(index){
+      let taskArray = taskDB.getTaskArray()
+      let task = taskArray[index]
+      let priority = task.getPriority()
+      let indexElement = document.querySelector('#editformtitle')
+      indexElement.setAttribute('data', index)
+
+
+      let input = document.querySelector('#editforminput')
+      input.value = task.getTitle()
+
+      let priorityElement = document.querySelector('#edithighpriority')
+
+      if (priority === 'high') {
+      priorityElement.checked = true
+      } else {
+        priorityElement.checked = false
+      }
+
+    }
+
     function showForm (option) {
         if (option === "task") {
             let element=document.querySelector('#formdiv')
             element.classList.add('flexbox')
             element.classList.remove('hide')
             console.log('newtask nav element clicked')
-        } else {
+        } 
+        else if (option === 'edit'){
+          let element = document.querySelector('#editformdiv')
+          element.classList.add('flexbox')
+          element.classList.remove('hide')
+      } 
+      else {
             let element=document.querySelector('#projectformdiv')
             element.classList.add('flexbox')
             element.classList.remove('hide')
@@ -73,7 +117,14 @@ const domHandler = (()=> {
             element.classList.add('hide')
             element.classList.remove('flexbox')
             _resetForm(option)
-        } else {
+        } 
+        else if (option === 'edit'){
+            let element = document.querySelector('#editformdiv')
+            element.classList.add('hide')
+            element.classList.remove('flexbox')
+            _resetForm(option)
+        }
+        else {
             let element=document.querySelector('#projectformdiv')
             element.classList.add('hide')
             element.classList.remove('flexbox')
@@ -87,7 +138,14 @@ const domHandler = (()=> {
             document.querySelector('#highpriority').checked = false
             document.querySelector('#formdate').value = ""    
             console.log('resetform func called')
-        } else {
+        } else if(option === 'edit')
+        {
+            document.querySelector('#editforminput').value = ""
+            document.querySelector('#edithighpriority').checked = false
+            document.querySelector('#editformdate').value = "" 
+        }
+        
+        else {
             document.querySelector('#projectforminput').value = ""
             console.log('projectresetform func called')
         }
@@ -95,7 +153,8 @@ const domHandler = (()=> {
 
     return{
     showForm,
-    closeForm
+    closeForm,
+    populateEditTask
     }
 
 })()
@@ -122,6 +181,36 @@ const formInputHandler = (()=> {
 
     }
 
+    function editTask(){
+      let index = parseInt(document.querySelector('#editformtitle').getAttribute('data'))
+      let task = taskDB.getTask(index)
+      console.log(task)
+      
+      let title = document.getElementById('editforminput').value
+      let date = dateHandler.formatDate(document.getElementById('editformdate').value)
+      let priority = _checkDomPriority(document.getElementById('edithighpriority'))
+      let element = document.getElementById('editformdate').nextElementSibling.nextElementSibling
+      let projectTitle = element.value
+        let newProject = projectDB.getProjectByTitle(projectTitle)
+        let newProjectIndex = projectDB.getIndex(newProject)
+
+
+      console.log(title, priority, projectTitle)
+
+      task.setTitle(title)
+      task.setDate(date)
+      task.setPriority(priority)
+      
+
+
+      let oldProject = relationshipHandler.getProjectByTask(index)
+      relationshipHandler.removeRelationship(oldProject,index)
+      relationshipHandler.addRelationship(newProjectIndex,index)
+      Pageload.populateTasks()
+
+
+    }
+
     function createProject(){
         let title = document.getElementById('projectforminput').value
         let project = new Project(title)
@@ -142,7 +231,8 @@ const formInputHandler = (()=> {
  
     return{
         createTask,
-        createProject
+        createProject,
+        editTask
     }
 
 })()

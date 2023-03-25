@@ -121,15 +121,15 @@ const Pageload = (()=> {
         editProjectSelectLabel.setAttribute('for', 'projectselect')
         editProjectSelectLabel.textContent= 'Select a project:'
         let editProjectSelect = document.createElement('select')
-        editProjectSelect.setAttribute('id','editprojectselect') 
-/*         let priority = document.createElement('input')
-        priority.setAttribute('type', 'checkbox') 
-        priority.setAttribute('id', 'highpriority')
-        priority.setAttribute('name', 'priority') */
-       /*  let labelPriority = document.createElement('label')
-        labelPriority.setAttribute('for', 'priority')
-        labelPriority.setAttribute('id', 'prioritylabel')
-        labelPriority.textContent = "High Priority" */
+        editProjectSelect.setAttribute('id','projectselect') 
+        let editPriority = document.createElement('input')
+        editPriority.setAttribute('type', 'checkbox') 
+        editPriority.setAttribute('id', 'edithighpriority')
+        editPriority.setAttribute('name', 'priority')
+        let labelEditPriority = document.createElement('label')
+        labelEditPriority.setAttribute('for', 'priority')
+        labelEditPriority.setAttribute('id', 'editprioritylabel')
+        labelEditPriority.textContent = "High Priority"
         let editSubmitButton = document.createElement('button')
         editSubmitButton.setAttribute('class', 'submitbutton')
         editSubmitButton.setAttribute('id', 'editsubmitbutton')
@@ -144,6 +144,8 @@ const Pageload = (()=> {
         editFormContainer.appendChild(editFormDate)
         editFormContainer.appendChild(editProjectSelectLabel)
         editFormContainer.appendChild(editProjectSelect)
+        editFormContainer.appendChild(labelEditPriority)
+        editFormContainer.appendChild(editPriority)
         editFormContainer.appendChild(editSubmitButton)
         editFormContainer.appendChild(editCancelButton)
         editFormDiv.appendChild(editFormContainer)
@@ -184,17 +186,21 @@ const Pageload = (()=> {
 
 
     function populateProjectSelect(){
-        let selectDiv = document.querySelector('#projectselect')
-        selectDiv.innerHTML =''
+        let selectDivs = document.querySelectorAll('#projectselect')
         let projectArray = projectDB.getProjectArray()
+        for (let selectDiv of selectDivs){
+            selectDiv.innerHTML = '';
+        
+        
 
-       for (let project in projectArray){
-        let option = document.createElement('option')
-        let title = projectArray[project].getTitle()
-        option.setAttribute('value', title)
-        option.textContent = title
-        selectDiv.appendChild(option)
-       }
+            for (let project of projectArray){
+            let option = document.createElement('option')
+            let title = project.getTitle()
+            option.setAttribute('value', title)
+            option.textContent = title
+            selectDiv.appendChild(option)
+           }
+        }
     }
 
     function _targetById(id) {
@@ -210,6 +216,9 @@ const Pageload = (()=> {
         _targetById('#cancelbutton').addEventListener('click', ()=> eventHandler.cancelTask(), false)
         _targetById('#projectsubmitbutton').addEventListener('click', ()=> eventHandler.projectFormSubmit(), false)
         _targetById('#projectcancelbutton').addEventListener('click', ()=> eventHandler.cancelProject(), false)
+        _targetById('#editcancelbutton').addEventListener('click', ()=> eventHandler.cancelEditTask(), false)
+        _targetById('#editsubmitbutton').addEventListener('click', ()=> eventHandler.editTaskSubmit(), false)
+        
     }
 
 
@@ -282,10 +291,10 @@ const Pageload = (()=> {
 
             let editButton = document.createElement('button')
             editButton.textContent = 'Edit'
-            deleteButton.addEventListener('click', function(){
-                console.log('clicked the edit button')
-
-
+            editButton.addEventListener('click', function(){
+                let container = this.parentElement;
+                let index = parseInt(container.getAttribute('data'))
+                eventHandler.editTask(index)
 
             })
 

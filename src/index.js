@@ -30,6 +30,9 @@ const taskDB = (()=> {
     }
 
     const getTask = (index) => taskArray[index]
+    function setTask(object,index){
+        taskArray[index] = object
+    }
 
     return{
         getTaskArray,
@@ -37,7 +40,8 @@ const taskDB = (()=> {
         addTask,
         getIndex,
         removeTask,
-        getTask
+        getTask,
+        setTask
     }
 
 })()
