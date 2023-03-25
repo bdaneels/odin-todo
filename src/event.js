@@ -1,4 +1,4 @@
-import {format, parse} from 'date-fns'
+import {format, parse, formatISO} from 'date-fns'
 import { Task, Project, taskDB, projectDB } from '.'
 import { Pageload } from './html'
 
@@ -74,6 +74,7 @@ const domHandler = (()=> {
       let taskArray = taskDB.getTaskArray()
       let task = taskArray[index]
       let priority = task.getPriority()
+      let formattedDate = dateHandler.formatISODate(dateHandler.formatLocaleDate(task.getDate()))
       let indexElement = document.querySelector('#editformtitle')
       indexElement.setAttribute('data', index)
 
@@ -82,12 +83,14 @@ const domHandler = (()=> {
       input.value = task.getTitle()
 
       let priorityElement = document.querySelector('#edithighpriority')
-
       if (priority === 'high') {
       priorityElement.checked = true
       } else {
         priorityElement.checked = false
       }
+
+      let datePicker = document.getElementById('editformdate')
+      datePicker.value = formattedDate
 
     }
 
@@ -240,21 +243,26 @@ const formInputHandler = (()=> {
 
 const dateHandler = (() => {
 
-    function formatDate(date){
-        return format(new Date(date), 'dd/MM/yyyy')
-    }
+  function formatDate(date) {
+    return format(new Date(date), "dd/MM/yyyy");
+  }
 
-    function formatLocaleDate(date){
-        
-            return parse(date, 'dd/MM/yyyy', new Date())
-    }
+  function formatLocaleDate(date) {
+    return parse(date, "dd/MM/yyyy", new Date());
+  }
 
-return {
+  function formatISODate(date) {
+    const utcDate = new Date(date + " UTC"); // explicitly set time zone to UTC
+    return utcDate.toISOString().split("T")[0];
+  }
+
+  // expose public methods
+  return {
     formatDate,
-    formatLocaleDate
-}
-
-})()
+    formatLocaleDate,
+    formatISODate,
+  };
+})();
 
 
 const relationshipHandler = (() => {
