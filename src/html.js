@@ -261,6 +261,9 @@ const Pageload = (()=> {
             let priorityBtn = document.createElement('button');
             priorityBtn.setAttribute('id', 'priorityBtn');
             priorityBtn.textContent = priority;
+
+            let buttonDiv = document.createElement('button')
+            buttonDiv.setAttribute('id', 'taskbuttondiv')
             
             priorityBtn.addEventListener('click', function() {
                 let container = this.parentElement;
@@ -278,7 +281,7 @@ const Pageload = (()=> {
             let deleteButton = document.createElement('button');
             deleteButton.textContent = "Delete";
             deleteButton.addEventListener('click', function() {
-                let container = this.parentElement;
+                let container = this.parentElement.parentElement;
                 let index = parseInt(container.getAttribute('data'));
                 
                 let projectIndex = relationshipHandler.getProjectByTask(index)
@@ -292,7 +295,7 @@ const Pageload = (()=> {
             let editButton = document.createElement('button')
             editButton.textContent = 'Edit'
             editButton.addEventListener('click', function(){
-                let container = this.parentElement;
+                let container = this.parentElement.parentElement;
                 let index = parseInt(container.getAttribute('data'))
                 eventHandler.editTask(index)
 
@@ -305,8 +308,9 @@ const Pageload = (()=> {
             container.appendChild(titleDiv)
             container.appendChild(dateDiv)
             container.appendChild(priorityBtn)
-            container.appendChild(deleteButton)
-            container.appendChild(editButton);
+            buttonDiv.appendChild(deleteButton)
+            buttonDiv.appendChild(editButton)
+            container.appendChild(buttonDiv)
           
 
             startDiv.appendChild(container)
