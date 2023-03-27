@@ -5,82 +5,105 @@ import { Pageload } from './html'
 
 
 
-const taskDB = (()=> {
-    let taskArray =  []
-
-    function addTask (object){
-
-        taskArray.push(object)
-        saveTasks()
+const taskDB = (() => {
+    let taskArray = [];
+  
+    function addTask(object) {
+      taskArray.push(object);
+      saveTasks();
     }
-    const getTaskArray = () => taskArray
-    function setTaskArray(array){
-        taskArray = array
+  
+    function getTaskArray() {
+      return taskArray;
     }
+  
+    function setTaskArray(array) {
+      taskArray = array;
+    }
+  
     function saveTasks() {
-        localStorage.setItem("tasks", JSON.stringify(taskArray));
+      localStorage.setItem("tasks", JSON.stringify(taskArray));
+    }
+  
+    function getIndex(object) {
+      return taskArray.indexOf(object);
+    }
+  
+    function removeTask(index) {
+      taskArray.splice(index, 1);
+      saveTasks();
+    }
+  
+    function getTask(index) {
+      return taskArray[index];
+    }
+  
+    function setTask(object, index) {
+      taskArray[index] = object;
+      saveTasks();
+    }
+  
+    return {
+      getTaskArray,
+      setTaskArray,
+      addTask,
+      getIndex,
+      removeTask,
+      getTask,
+      setTask,
+    };
+  })();
+  
+  const projectDB = (() => {
+    let projectArray = [];
+  
+    function addProject(object) {
+      projectArray.push(object);
+      saveProjects();
+    }
+  
+    function getProjectArray() {
+      return projectArray;
+    }
+  
+    function setProjectArray(array) {
+      projectArray = array;
+    }
+  
+    function saveProjects() {
+      localStorage.setItem("projects", JSON.stringify(projectArray));
+    }
+  
+    function getIndex(object) {
+      return projectArray.indexOf(object);
+    }
+  
+    function removeProject(object) {
+      let index = getIndex(object);
+      if (index !== -1) {
+        projectArray.splice(index, 1);
+        saveProjects();
       }
-    function getIndex (object) {
-        return taskArray.indexOf(object)
-        
     }
-    function removeTask(index){
-        delete taskArray[index]
-        saveTasks()
-    }
-
-    const getTask = (index) => taskArray[index]
-    function setTask(object,index){
-        taskArray[index] = object
-    }
-
-    return{
-        getTaskArray,
-        setTaskArray,
-        addTask,
-        getIndex,
-        removeTask,
-        getTask,
-        setTask
-    }
-
-})()
-
-const projectDB = (()=> {
-    const projectArray = new Array()
-
-    function addProject (object){
-
-        projectArray.push(object)
-    }
-    const getProjectArray = () => projectArray
-    function getIndex (object) {
-        return projectArray.indexOf(object)
-        
-    }
-    function removeProject(object){
-        let index = getIndex(object)
-        delete projectArray[index]
-    }
+  
     function getProjectByTitle(title) {
-        const projectArray = getProjectArray()
-        for (let i = 0; i < projectArray.length; i++) {
-          if (projectArray[i].title === title) {
-            return projectArray[i]
-          }
+      for (let i = 0; i < projectArray.length; i++) {
+        if (projectArray[i].getTitle() === title) {
+          return projectArray[i];
         }
-        return null // return null if project with given title not found
       }
-
-    return{
-        getProjectArray,
-        addProject,
-        getIndex,
-        removeProject,
-        getProjectByTitle
+      return null;
     }
-
-})()
+  
+    return {
+      getProjectArray,
+      addProject,
+      getIndex,
+      removeProject,
+      getProjectByTitle,
+      setProjectArray,
+    };
+  })();
 
 const activeProject = (()=> {
     let activeProject = '0'
@@ -150,10 +173,11 @@ export{taskDB,projectDB, activeProject, Project, Task}
 
 
 /* default project */
+
 let project1 = new Project('default')
 
 projectDB.addProject(project1)
 activeProject.setActiveProject(0)
 
-
 Pageload.load()
+

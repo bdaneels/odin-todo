@@ -43,7 +43,7 @@ body{
 }
 
 #formdiv, #projectformdiv, #editformdiv{
-    @apply absolute justify-center items-center z-50 bg-white bg-opacity-30 w-screen h-screen
+    @apply absolute justify-center items-center z-50 bg-black bg-opacity-30 w-screen h-screen
 }
 
 #formcontainer,#projectformcontainer, #editformcontainer{

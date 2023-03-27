@@ -1,4 +1,4 @@
-import { eventHandler, dateHandler, relationshipHandler } from "./event"
+import { eventHandler, dateHandler, relationshipHandler, } from "./event"
 import { Task, Project, taskDB, projectDB, activeProject } from '.'
 
 const Pageload = (()=> {
@@ -349,6 +349,7 @@ const Pageload = (()=> {
 
 
     function load (){
+        
         _constructForms()
         populateProjectSelect()
         _constructHTML()

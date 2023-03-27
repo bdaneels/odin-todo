@@ -268,6 +268,10 @@ const dateHandler = (() => {
 const relationshipHandler = (() => {
     const relationshipObject = {}
     
+    function saveRelationShips(){
+      localStorage.setItem("relations", JSON.stringify(relationshipObject));
+    }
+
     function addRelationship(projectIndex, taskIndex) {
       if (relationshipObject.hasOwnProperty(projectIndex)) {
         relationshipObject[projectIndex].push(taskIndex)
@@ -276,6 +280,7 @@ const relationshipHandler = (() => {
       }
       console.log(`relationship added with ${projectIndex} as projectindex and ${taskIndex} as taskindex`)
       console.log(relationshipObject)
+      saveRelationShips()
     }
     
     function removeRelationship(projectIndex, taskIndex) {
@@ -288,6 +293,7 @@ const relationshipHandler = (() => {
             delete relationshipObject[projectIndex]
           }
         }
+        saveRelationShips()
       }
     }
     
@@ -317,12 +323,17 @@ const relationshipHandler = (() => {
         return null
       }
 
+    function setRelations(object){
+      relationshipObject = object
+    }
+
 
     return {
       addRelationship,
       removeRelationship,
       getTasksByProject,
-      getProjectByTask
+      getProjectByTask,
+      setRelations
     }
   })()
 
@@ -357,12 +368,35 @@ const relationshipHandler = (() => {
 
   function checkForStorage(){
     if (_storageAvailable("localStorage")) {
-      let taskArray = JSON.parse(localStorage.getItem("tasks")) || []
-      taskDB.setTaskArray(taskArray)
+      let taskArray = JSON.parse(localStorage.getItem("tasks")) || [];
+      let tasks = [];
 
+      for (let i = 0; i < taskArray.length; i++) {
+        let task = taskArray[i]
+        task.setTitle = Task.prototype.setTitle.bind(task);
+        task.getTitle = Task.prototype.getTitle.bind(task);
+        task.setPriority = Task.prototype.setPriority.bind(task);
+        task.getPriority = Task.prototype.getPriority.bind(task);
+        task.setDate = Task.prototype.setDate.bind(task);
+        task.getDate = Task.prototype.getDate.bind(task);
+        tasks.push(task);
+      }
+      taskDB.setTaskArray(tasks);
 
+      let projectArray = JSON.parse(localStorage.getItem("projects")) || [];
+      let projects = []
 
-      console.log(`${taskArray[0].getTitle()}`)
+      for (let i = 0; i < projectArray.length; i++) {
+        let projectData = projectArray[i];
+        let project = new Project(projectData.title);
+        projects.push(project);
+      }
+
+      projectDB.setProjectArray(projects)
+
+      let relations = JSON.parse(localStorage.getItem("relations")) || {};
+      relationshipHandler.setRelations(relations)
+
     } else {
       localStorage = false
       console.log(`storage not available`)
@@ -380,4 +414,4 @@ const relationshipHandler = (() => {
 
 
 
-export {domHandler, eventHandler, dateHandler, relationshipHandler}
+export {domHandler, eventHandler, dateHandler, relationshipHandler,}
