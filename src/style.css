@@ -63,6 +63,10 @@ body{
     @apply bg-black text-white rounded-xl py-4 px-10 hover:bg-white hover:text-black
 }
 
+#projectcontainer{
+    @apply flex space-x-4 items-center
+}
+
 #taskbuttondiv{
     @apply flex space-x-6
 }

@@ -324,28 +324,53 @@ const Pageload = (()=> {
     function populateProjects(){
         let projectDiv = document.querySelector('#projectdiv')
         projectDiv.innerHTML= ""
-
+      
         let array = projectDB.getProjectArray()
         for (let object in array) {
-            let title = array[object].getTitle()
-            let index = projectDB.getIndex(array[object])
-            let projectBtn = document.createElement('button')
-            projectBtn.setAttribute('data', index)
-            projectBtn.setAttribute('id', 'projectbtn')
-            projectBtn.textContent = title
-            projectBtn.addEventListener('click', function(){
-                
-                let projectIndex = parseInt(projectBtn.getAttribute('data')) ;
-                console.log(typeof projectIndex)
-                activeProject.setActiveProject(projectIndex)
-                populateTasks()
-
-            })
-            projectDiv.appendChild(projectBtn)
+          let title = array[object].getTitle()
+          let index = projectDB.getIndex(array[object])
+          let projectBtn = document.createElement('button')
+          projectBtn.setAttribute('data', index)
+          projectBtn.setAttribute('id', 'projectbtn')
+          projectBtn.textContent = title
+          let projectContainer = document.createElement('div')
+          projectContainer.setAttribute('id', 'projectcontainer')
+          projectContainer.setAttribute('data', index)
+          projectBtn.addEventListener('click', function(){
+            let projectIndex = parseInt(projectBtn.getAttribute('data')) ;
+            activeProject.setActiveProject(projectIndex)
+            populateTasks()
+          })
+      
+          let projectDelete = document.createElement('button')
+          projectDelete.setAttribute('id', 'projectdeletebtn')
+          let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("width", "16");
+          svg.setAttribute("height", "16");
+          svg.setAttribute("viewBox", "0 0 16 16");
+          let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", "M2 3h12v2H2V3zm12 4H2v6h12V7zm-2 4H4v-3h8v3z");
+          path.setAttribute("fill", "currentColor");
+          svg.appendChild(path);
+          projectDelete.appendChild(svg);
+          projectDelete.addEventListener('click', function(){
+            let container = this.parentElement
+            let index = parseInt(container.getAttribute('data'))
+            let projectArray = projectDB.getProjectArray()
+            let project = projectArray[index]
+            projectDB.removeProject(project)
+            relationshipHandler.removeAllTasksByProject(index)
+      
+            activeProject.setActiveProject(0)
+            populateProjects()
+            populateTasks()
+          })
+      
+          projectContainer.appendChild(projectBtn)
+          projectContainer.appendChild(projectDelete)
+          projectDiv.appendChild(projectContainer)  
         }
-        
-
-    }
+      }
 
 
     function load (){

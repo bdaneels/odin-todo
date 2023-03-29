@@ -44,6 +44,7 @@ const eventHandler = (()=> {
       domHandler.closeForm('edit')
     }
 
+
     function projectFormSubmit () {
         formInputHandler.createProject()
         domHandler.closeForm('project')
@@ -296,7 +297,16 @@ const relationshipHandler = (() => {
         saveRelationShips()
       }
     }
-    
+
+    function removeAllTasksByProject(projectIndex) {
+      if (relationshipObject.hasOwnProperty(projectIndex)) {
+        delete relationshipObject[projectIndex];
+        saveRelationShips();
+        console.log(`All task relationships have been removed for project index ${projectIndex}`);
+      }
+    }
+
+
     function getTasksByProject(projectIndex) {
       const taskIndices = relationshipObject[projectIndex]
       const tasks = []
@@ -333,7 +343,8 @@ const relationshipHandler = (() => {
       removeRelationship,
       getTasksByProject,
       getProjectByTask,
-      setRelations
+      setRelations,
+      removeAllTasksByProject
     }
   })()
 
