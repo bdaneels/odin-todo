@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .header {
-    @apply h-32 bg-slate-700 w-full
+    @apply flex justify-center items-center h-32 bg-slate-700 w-full
 
 
 }
@@ -31,6 +31,10 @@ body{
 
 #forminput, #projectforminput {
     @apply placeholder:items-center
+}
+
+#activeproject{
+    @apply bg-blue-100 text-lg py-10 px-10 rounded-xl
 }
 
 

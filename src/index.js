@@ -110,9 +110,21 @@ const activeProject = (()=> {
 
     function setActiveProject(projectIndex){
         activeProject = projectIndex
+        _styleActiveProject(projectIndex)
     }
 
     const getActiveProject = () => activeProject
+
+    function _styleActiveProject(index){
+      let container = document.getElementById('activeproject')
+      if(container != null){
+      let array = projectDB.getProjectArray()
+      let title = array[parseInt(index)].getTitle()
+      console.log(`the container in the _styleactiveproject is ${container}`)
+      container.textContent = `Active Project: ${title}`
+    }
+  
+    }
 
     
 
@@ -177,7 +189,6 @@ export{taskDB,projectDB, activeProject, Project, Task}
 let project1 = new Project('default')
 
 projectDB.addProject(project1)
-activeProject.setActiveProject(0)
 
 Pageload.load()
-
+activeProject.setActiveProject(0)

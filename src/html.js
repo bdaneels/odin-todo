@@ -6,6 +6,12 @@ const Pageload = (()=> {
     function _constructHTML () {
         let header = document.createElement('div')
         header.classList.add('header')
+
+        let activeProjectDiv = document.createElement('div')
+        activeProjectDiv.setAttribute('id','activeproject')
+
+        header.appendChild(activeProjectDiv)
+
         let navbarContentDiv = document.createElement('div')
         navbarContentDiv.classList.add('nav-cont')
     
@@ -290,6 +296,7 @@ const Pageload = (()=> {
 
                 taskDB.removeTask(index);
                 populateTasks();
+                populateProjectSelect()
             });
 
             let editButton = document.createElement('button')
@@ -358,12 +365,16 @@ const Pageload = (()=> {
             let index = parseInt(container.getAttribute('data'))
             let projectArray = projectDB.getProjectArray()
             let project = projectArray[index]
-            projectDB.removeProject(project)
+            if(index != 0 ){projectDB.removeProject(project)
             relationshipHandler.removeAllTasksByProject(index)
       
             activeProject.setActiveProject(0)
             populateProjects()
-            populateTasks()
+            populateProjectSelect()
+            populateTasks()} 
+            else {
+                window.alert('Cannot delete default project.')
+            }
           })
       
           projectContainer.appendChild(projectBtn)
