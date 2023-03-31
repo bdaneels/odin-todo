@@ -30,7 +30,7 @@ const taskDB = (() => {
     }
   
     function removeTask(index) {
-      taskArray.splice(index, 1);
+      delete taskArray[index];
       saveTasks();
     }
   
@@ -81,7 +81,7 @@ const taskDB = (() => {
     function removeProject(object) {
       let index = getIndex(object);
       if (index !== -1) {
-        projectArray.splice(index, 1);
+        delete projectArray[index];
         saveProjects();
       }
     }
